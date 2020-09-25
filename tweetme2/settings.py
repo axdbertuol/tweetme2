@@ -26,9 +26,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY", default="bar")
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
-# For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
+# For example:
+if os.environ.get("DJANGO_ALLOWED_HOSTS"):
+    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+else:
+    DJANGO_ALLOWED_HOSTS='localhost 127.0.0.1 [::1]'
+    ALLOWED_HOSTS=DJANGO_ALLOWED_HOSTS.split(" ")
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,7 +59,7 @@ ROOT_URLCONF = 'tweetme2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
