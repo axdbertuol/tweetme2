@@ -1,7 +1,7 @@
 1. Tweets
     -> Creating
         -> Text
-        -> Image
+        -> Image -> Media Storage Field
     -> Delete
     -> Retweeting
 

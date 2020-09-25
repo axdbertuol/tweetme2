@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/alexandre/.local/share/virtualenvs/tweetme2-D6e826jg/bin/python"
+    "python.pythonPath": "/home/alexandre/.local/share/virtualenvs/tweetme2-project-KE9PagqA",
+    "python.formatting.provider": "black"
 }
