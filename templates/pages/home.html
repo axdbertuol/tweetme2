@@ -1,5 +1,50 @@
 {% extends 'base.html' %}
 {% block head_title %} {% endblock head_title %}
 {% block content %}
-Welcome to Tweetme2
+<div class="row text-center">
+    <div class="col">
+        <h2>Welcome to Tweetme2</h2>
+    </div>
+</div>
+<div class="row" id="tweets">
+    Loading tweets...
+</div>
+
+<script type="text/javascript">
+
+const tweetsElement = document.getElementById('tweets');
+
+
+const xhr = new XMLHttpRequest();
+const method = 'GET';
+const url = "/tweets";
+const responseType = 'json';
+
+function handleDidLike(tweet_id, currentCount){
+
+}
+
+function LikeBtn(tweet_id, tweet_likes) {
+    return "<button class='btn btn-primary btn-sm' onclick='handleDidLike(" + tweet_id + "," + tweet_likes + ")'>" + tweet_likes + " Like(s)</button>";
+}
+
+xhr.responseType = responseType;
+xhr.open(method, url);
+xhr.onload = function() {
+    const serverResponse = xhr.response;
+    let listedItems = serverResponse.response;
+    
+    let str = listedItems.map(({id, content, likes}, index) => {
+        return '<div class="col-12 col-md-10 mx-auto border rounded py-3 mb-4" id="tweet_' +  id + '"><p>' + content + '</p><div class="btn-group">' + LikeBtn(id, likes) + '</div></div>';
+    }).join('');
+    tweetsElement.innerHTML = str;
+
+    // console.log(xhr.response);
+    console.log(str);
+   // console.log(listedItems);
+}
+xhr.send();
+
+
+</script>
 {% endblock content %}
