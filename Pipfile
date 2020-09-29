@@ -29,6 +29,8 @@ Django = "==2.2"
 Pillow = "==7.2.0"
 psycopg2 = "*"
 pylint-django = "*"
+faker = "*"
+pytest-faker = "*"
 
 [requires]
 python_version = "3.8"
