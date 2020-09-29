@@ -17,7 +17,7 @@ def faker_seed():
 def db_setup(request, faker):
 
     
-    users = make_users(faker)
+    users = make_fake_users(faker)
     content_arr = make_tweet_contents(faker)
 
  
@@ -31,7 +31,7 @@ def db_setup(request, faker):
 
 
 @pytest.mark.django_db
-def make_users(faker):
+def make_fake_users(faker):
 
     users = []
 

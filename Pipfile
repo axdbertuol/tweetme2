@@ -31,6 +31,7 @@ psycopg2 = "*"
 pylint-django = "*"
 faker = "*"
 pytest-faker = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"

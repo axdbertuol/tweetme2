@@ -20,13 +20,14 @@
 </div>
 
 <div class="row" id="tweets">
-    Loading tweets...
+    <span class="d-none" id="loading-text"> Loading tweets... </span>
 </div>
 
 <script type="text/javascript">
 
 const tweetCreateFormEl = document.getElementById('tweet-create-form');
 const tweetsElement = document.getElementById('tweets');
+const loadingTextEl = document.getElementById('loading-text');
 
 tweetCreateFormEl.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -44,6 +45,7 @@ tweetCreateFormEl.addEventListener('submit', (e) => {
         if (xhr.status === 201){
             handleTweetFormError("", false)
             const newTweetJson = xhr.response;
+            
             tweetsElement.innerHTML = formatTweetElement([newTweetJson]) + tweetsElement.innerHTML;
             myForm.reset();
         } else if (xhr.status === 400) {
@@ -60,8 +62,18 @@ tweetCreateFormEl.addEventListener('submit', (e) => {
                 alert('Some other error occurred, please try again')
             }
 
-
-        } else if (xhr.status === 500){
+        } 
+        else if (xhr.status === 401) { // unauthenticated
+            alert('Unauthorized. You must login first.')
+            window.location.href = "/login"
+        
+        } 
+        else if (xhr.status === 403) { // unauthenticated
+            alert('Unauthorized. You must login first.')
+            window.location.href = "/login"
+        
+        } 
+        else if (xhr.status === 500){
             alert("There was a server error, please try again")
         }
     }
@@ -100,10 +112,10 @@ const loadTweets = function(tweetsElement) {
     const responseType = 'json';
     xhr.responseType = responseType;
     xhr.open(method, url);
-
+    
     xhr.onload = function() {
         const serverResponse = xhr.response;
-        let listedItems = serverResponse.response;
+        let listedItems = serverResponse;
         
         tweetsElement.innerHTML = formatTweetElement(listedItems);
     }
