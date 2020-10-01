@@ -27,6 +27,8 @@ LOGIN_URL = "/login"
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
 MAX_TWEET_LENGTH = 240
+TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
+
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example:

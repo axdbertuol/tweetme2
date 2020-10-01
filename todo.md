@@ -4,6 +4,8 @@
         -> Image -> Media Storage Field
     -> Delete
     -> Retweeting
+        -> Read only serializer
+        -> Create only serializer
     -> Liking
 
 2. Users
