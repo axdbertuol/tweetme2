@@ -12,13 +12,19 @@ User = get_user_model()
 @pytest.mark.django_db
 def test_create_tweet(client):
 
-    tweets = Tweet.objects.all()
     user = User.objects.create(username='carl')
-    response = client.post("/create-tweet", {"content": "This is a test tweet", "user": user})
+    client.force_login(user)
+    response = client.post(
+        "/api/tweets/create", 
+        {"content": "This is a test tweet"},
+        content_type= "application/json"
+    )
 
-    assert response.status_code == 200
+    tweets = Tweet.objects.all()
+    assert response.status_code == 201
     assert len(tweets) == 1
-    assert tweets.get(id=1).content == "This is a test tweet"
+    print(Tweet.objects.all().values_list())
+    assert tweets.get(user=user, id=1).content == "This is a test tweet"
 
 
 @pytest.mark.django_db
@@ -28,10 +34,12 @@ def test_tweet_error_too_long(client):
     for _ in range(300):
         toolong += 'a'
     user = User.objects.create(username='carl')
-    response = client.post("/create-tweet", {"content": toolong, "user": user}, content_type='application/json')
+    client.force_login(user)
+
+    response = client.post("/api/tweets/create", {"content": toolong}, content_type='application/json')
     tweets = Tweet.objects.all()
 
-    print(response.content)
+    assert response.data['content'][0] == 'This tweet is too long'
     assert response.status_code == 400
     assert len(tweets) == 0
 

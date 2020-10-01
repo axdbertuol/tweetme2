@@ -4,19 +4,23 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 @pytest.mark.django_db
-def test_tweet_model():
-    user = User.objects.create(username='carl')
+def test_tweet_model(predef_db_setup):
+    user = User.objects.get(username="john")
     tweet = Tweet(content="This is a test tweet omg nsfw thanks!", user=user)
     tweet.save()
     assert tweet.content == "This is a test tweet omg nsfw thanks!"
     # assert tweet.created_date
     # assert tweet.updated_date
     assert str(tweet) == tweet.content
+
     assert user == tweet.user
+
+
 @pytest.mark.django_db
 def test_tweet_descending_ordering():
-    user = User.objects.create(username='carl')
+    user = User.objects.create(username="carl")
 
     tweet = Tweet(content="This is a test tweet omg nsfw thanks!", user=user)
     tweet.save()
@@ -28,9 +32,72 @@ def test_tweet_descending_ordering():
     tweets = Tweet.objects.all()
     # print(tweets)
     assert len(tweets) == 3
-    assert [ tweet for tweet in tweets ] == [ tweet3, tweet2, tweet ]
+    assert [tweet for tweet in tweets] == [tweet3, tweet2, tweet]
+
 
 @pytest.mark.django_db
-def test_tweet_user_fake_db(db_setup):
-    # print(tweets)
-    assert len(Tweet.objects.all()) == 25
+def test_likes(predef_db_setup):
+    # Given
+    user_j = User.objects.get(username='john')
+    user_m = User.objects.get(username='monkey')
+    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    print(tweet_j)
+    assert tweet_j.content != '' 
+    assert tweet_j.likes.exists() == False
+    assert tweet_j.likes.count() == 0
+
+    # When
+    tweet_j.likes.add(user_m)
+
+    # Then
+    assert tweet_j.content != ''
+    assert tweet_j.likes.count() == 1
+    assert tweet_j.likes.exists() == True
+    assert tweet_j.likes.first() == user_m
+
+@pytest.mark.django_db
+def test_likes_remove(predef_db_setup):
+    user_j = User.objects.get(username='john')
+    user_m = User.objects.get(username='monkey')
+    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    assert tweet_j.content != '' 
+    assert tweet_j.likes.exists() == False
+    assert tweet_j.likes.count() == 0
+
+    tweet_j.likes.add(user_m)
+    assert tweet_j.likes.first() == user_m
+    tweet_j.likes.remove(user_m)
+
+    assert tweet_j.likes.first() == None
+    assert tweet_j.likes.exists() == False
+
+@pytest.mark.django_db
+def test_likes_more_than_one(predef_db_setup):
+    user_j = User.objects.get(username='john')
+    user_m = User.objects.get(username='monkey')
+    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    assert tweet_j.content != '' 
+    assert tweet_j.likes.exists() == False
+    assert tweet_j.likes.count() == 0
+
+    tweet_j.likes.add(user_m)
+    tweet_j.likes.add(user_m)
+
+    assert tweet_j.likes.count() == 1
+
+@pytest.mark.django_db
+def test_retweet(predef_db_setup):
+
+    user_j = User.objects.get(username='john')
+    user_m = User.objects.get(username='monkey')
+    tweet_j = Tweet.objects.get(user=user_j, id=1)
+
+    tweet_m = Tweet.objects.create(user=user_m, parent=tweet_j)
+
+    print(tweet_m.parent)
+    assert tweet_m.is_retweet == True
+    assert tweet_m.parent == tweet_j
+    # assert tweet_m.content == tweet_j.content
+
+
+    
