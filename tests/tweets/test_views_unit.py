@@ -1,10 +1,11 @@
 import pytest
 from django.http import Http404
 
+from tweets.models import Tweet
 from tweets.views import (
     tweet_create_view, tweet_delete_view, 
     tweet_list_view, tweet_detail_view, tweet_action_view,
-    TweetCreateSerializer
+    TweetCreateSerializer, TweetSerializer
 )
 
 from django.contrib.auth import get_user_model
@@ -44,3 +45,14 @@ def test_add_tweet_invalid_json(client, auth_user):
 # def test_add_tweet_invalid_json_keys(client, auth_user):
 #     resp = client.post("/api/tweets/create", {"contrent": 'xx'}, content_type="application/json")
 #     assert resp.status_code == 400
+
+# @pytest.mark.django_db
+# def test_get_single_tweet_authenticated(client, mocker, auth_user):
+#     payload = {"content": "hello"}
+
+#     def mock_filter(self, id):
+#     response = client.get('/api/tweets/1')
+#     assert response.status_code == 200
+#     assert response.data["content"] == "hello"
+
+
