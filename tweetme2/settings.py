@@ -25,6 +25,7 @@ LOGIN_URL = "/login"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
+print('DEBUG: ', DEBUG)
 
 MAX_TWEET_LENGTH = 240
 TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
@@ -37,6 +38,9 @@ if os.environ.get("DJANGO_ALLOWED_HOSTS"):
 else:
     DJANGO_ALLOWED_HOSTS = "localhost 127.0.0.1 [::1]"
     ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS.split(" ")
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r'^/api/.*$'
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,12 +51,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
     "tweets",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -134,17 +140,27 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
+
 DEFAULT_RENDERER_CLASSES = [
     "rest_framework.renderers.JSONRenderer",
 ]
+
 if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [
-        "rest_framework.renderers.BrowsableAPIRenderer",
-    ]
+    DEFAULT_RENDERER_CLASSES.append("rest_framework.renderers.BrowsableAPIRenderer")
+
+DEFAULT_AUTHENTICATION_CLASSES = [
+	"rest_framework.authentication.SessionAuthentication",
+]
+
+if DEBUG:
+	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
     "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
 }
