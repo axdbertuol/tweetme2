@@ -19,6 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+from accounts.views import (
+	login_view, registration_view, logout_view
+)
 from tweets.views import (
     tweets_detail_view, 
     tweets_list_view, tweets_profile_view
@@ -27,6 +30,9 @@ from tweets.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('react/', TemplateView.as_view(template_name='react_via_dj.html')),
+	path('login/', login_view),
+	path('register/', registration_view),
+	path('logout/', logout_view),
     path('', tweets_list_view ),
     path('<int:tweet_id>', tweets_detail_view ),
 	path('profile/<str:username>', tweets_profile_view),
