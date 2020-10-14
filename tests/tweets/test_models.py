@@ -13,7 +13,7 @@ def test_tweet_model(predef_db_setup):
     assert tweet.content == "This is a test tweet omg nsfw thanks!"
     # assert tweet.created_date
     # assert tweet.updated_date
-    assert str(tweet) == tweet.content
+    assert "This is a test tweet omg nsfw thanks!" == tweet.content
 
     assert user == tweet.user
 
@@ -40,8 +40,7 @@ def test_likes(predef_db_setup):
     # Given
     user_j = User.objects.get(username='john')
     user_m = User.objects.get(username='monkey')
-    tweet_j = Tweet.objects.get(user=user_j, id=1)
-    print(tweet_j)
+    tweet_j = Tweet.objects.filter(user=user_j).first()
     assert tweet_j.content != '' 
     assert tweet_j.likes.exists() == False
     assert tweet_j.likes.count() == 0
@@ -59,7 +58,7 @@ def test_likes(predef_db_setup):
 def test_likes_remove(predef_db_setup):
     user_j = User.objects.get(username='john')
     user_m = User.objects.get(username='monkey')
-    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    tweet_j = Tweet.objects.filter(user=user_j).first()
     assert tweet_j.content != '' 
     assert tweet_j.likes.exists() == False
     assert tweet_j.likes.count() == 0
@@ -75,7 +74,7 @@ def test_likes_remove(predef_db_setup):
 def test_likes_more_than_one(predef_db_setup):
     user_j = User.objects.get(username='john')
     user_m = User.objects.get(username='monkey')
-    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    tweet_j = Tweet.objects.filter(user=user_j).first()
     assert tweet_j.content != '' 
     assert tweet_j.likes.exists() == False
     assert tweet_j.likes.count() == 0
@@ -90,14 +89,13 @@ def test_retweet(predef_db_setup):
 
     user_j = User.objects.get(username='john')
     user_m = User.objects.get(username='monkey')
-    tweet_j = Tweet.objects.get(user=user_j, id=1)
+    tweet_j = Tweet.objects.filter(user=user_j).first()
 
     tweet_m = Tweet.objects.create(user=user_m, parent=tweet_j)
 
-    print(tweet_m.parent)
     assert tweet_m.is_retweet == True
     assert tweet_m.parent == tweet_j
-    # assert tweet_m.content == tweet_j.content
 
 
-    
+# @pytest.mark.django_db
+# def test_related_names():

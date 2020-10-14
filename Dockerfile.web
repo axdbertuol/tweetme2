@@ -1,0 +1,42 @@
+# pull official base image
+FROM python:3.8.3-alpine
+
+# set work directory
+RUN mkdir -p /usr/src/tweetme2-project
+WORKDIR /usr/src/tweetme2-project
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
+ENV SECRET_KEY foo
+ENV DJANGO_ALLOWED_HOSTS .herokuapp.com
+# make pipenv install to the system
+ENV PIPENV_SYSTEM=1
+
+# install psycopg2 and Pillow dependencies
+RUN apk update \
+	&& apk add postgresql-dev gcc python3-dev musl-dev  \
+	&& apk add zlib-dev jpeg-dev
+
+# install dependencies
+RUN pip install --upgrade pip pipenv
+COPY ./Pipfile ./Pipfile.lock /usr/src/tweetme2-project/
+# COPY ./requirements-dev.txt /usr/src/tweetme2/requirements-dev.txt
+# RUN pip install -r requirements-dev.txt
+# RUN pipenv install Pillow 
+RUN pipenv install --deploy
+RUN which django-admin
+
+# copy project
+COPY . /usr/src/tweetme2-project/
+
+# collect static files
+RUN python manage.py collectstatic --noinput
+
+# add and run as non-root user
+RUN adduser -D xad
+USER xad
+
+# run gunicorn
+CMD gunicorn tweetme2.wsgi:application --bind 0.0.0.0:$PORT

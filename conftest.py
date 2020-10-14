@@ -16,42 +16,39 @@ def faker_seed():
 @pytest.mark.django_db
 def faker_db_setup(request, faker):
 
-    
     users = make_fake_users(faker)
     content_arr = make_tweet_contents(faker)
 
- 
     for c in content_arr:
-        Tweet.objects.create(content=c, user=users[random.randint(0,8)])
-    
+        Tweet.objects.create(content=c, user=users[random.randint(0, 8)])
+
     def fin():
         yield [tweet for tweet in Tweet.objects.all()]
+
 
 @pytest.fixture
 @pytest.mark.django_db
 def predef_db_setup(request, faker):
 
-    
     make_predef_users()
-    content_arr = make_tweet_contents(faker) #25 tweets
+    content_arr = make_tweet_contents(faker)  # 25 tweets
 
-    user = User.objects.get(username='john')
-    for i in range(0, 6): # 5 tweets for john
+    user = User.objects.get(username="john")
+    for i in range(0, 6):  # 5 tweets for john
         Tweet.objects.create(content=content_arr[i], user=user)
 
-    user = User.objects.get(username='monkey')
-    for i in range(6, 13): # 6 tweets for monkey
+    user = User.objects.get(username="monkey")
+    for i in range(6, 13):  # 6 tweets for monkey
         Tweet.objects.create(content=content_arr[i], user=user)
-    
-    user = User.objects.get(username='murago')
-    for i in range(13, 22): # 8 tweets for murago
+
+    user = User.objects.get(username="murago")
+    for i in range(13, 22):  # 8 tweets for murago
         Tweet.objects.create(content=content_arr[i], user=user)
-    
-    user = User.objects.get(username='marx')
-    for i in range(22, 25): # 3 tweets for marx
+
+    user = User.objects.get(username="marx")
+    for i in range(22, 25):  # 3 tweets for marx
         Tweet.objects.create(content=content_arr[i], user=user)
-    
-    
+
     def fin():
         yield [tweet for tweet in Tweet.objects.all()]
 
@@ -59,11 +56,22 @@ def predef_db_setup(request, faker):
 @pytest.mark.django_db
 def make_predef_users(count=10):
 
-    usernames = ['john', 'monkey', 'murago', 'peter', 'bob', 'karl', 'marx', 'jung', 'lacan', 'freud']
+    usernames = [
+        "john",
+        "monkey",
+        "murago",
+        "peter",
+        "bob",
+        "karl",
+        "marx",
+        "jung",
+        "lacan",
+        "freud",
+    ]
     users = []
     for username in usernames:
         users.append(User.objects.create(username=username))
-    
+
     return users
 
 

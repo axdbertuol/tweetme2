@@ -28,8 +28,8 @@ def tweets_list_view(request):
 def tweets_detail_view(request, tweet_id):
 	return render(request, "tweets/detail.html", context={"tweetId": tweet_id})
 
-def tweets_profile_view(request, username):
-	return render(request, "tweets/profile.html", context={"profile_username": username})
+# def tweets_profile_view(request, username):
+# 	return render(request, "tweets/profile.html", context={"profile_username": username})
 
 
 def tweet_create_view_pure_django(request):
