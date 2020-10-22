@@ -23,6 +23,10 @@
 
 3. Following / Followers
 
+4. Tests
+	- functional tests selenium
+	- unit tests
+	- jest
 
 Long term todos
 - Notifications

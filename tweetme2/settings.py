@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,57 +36,62 @@ TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example:
 if os.environ.get("DJANGO_ALLOWED_HOSTS"):
-    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+	ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 else:
-    DJANGO_ALLOWED_HOSTS = "localhost 127.0.0.1 [::1]"
-    ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS.split(" ")
+	DJANGO_ALLOWED_HOSTS = "localhost 127.0.0.1 [::1] 0.0.0.0"
+	ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS.split(" ")
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_URLS_REGEX = r'^/api/.*$'
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "rest_framework",
-    "corsheaders",
-    "accounts",
+	"django.contrib.admin",
+	"django.contrib.auth",
+	"django.contrib.contenttypes",
+	"django.contrib.sessions",
+	"django.contrib.messages",
+	"django.contrib.staticfiles",
+	"rest_framework",
+	"corsheaders",
+	"accounts",
 	"profiles",
 	"tweets",
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'http_x_requested_with',
+]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-	'whitenoise.middleware.WhiteNoiseMiddleware',
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+	"django.middleware.security.SecurityMiddleware",
+	"django.contrib.sessions.middleware.SessionMiddleware",
+	'corsheaders.middleware.CorsMiddleware',
+	"django.middleware.common.CommonMiddleware",
+	"django.middleware.csrf.CsrfViewMiddleware",
+	"django.contrib.auth.middleware.AuthenticationMiddleware",
+	"django.contrib.messages.middleware.MessageMiddleware",
+	"django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG == 0:
+	MIDDLEWARE.insert(1,'whitenoise.middleware.WhiteNoiseMiddleware') 
 
 ROOT_URLCONF = "tweetme2.urls"
 
 TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
+	{
+		"BACKEND": "django.template.backends.django.DjangoTemplates",
+		"DIRS": [os.path.join(BASE_DIR, "templates")],
+		"APP_DIRS": True,
+		"OPTIONS": {
+			"context_processors": [
+				"django.template.context_processors.debug",
+				"django.template.context_processors.request",
+				"django.contrib.auth.context_processors.auth",
+				"django.contrib.messages.context_processors.messages",
+			],
+		},
+	},
 ]
 
 WSGI_APPLICATION = "tweetme2.wsgi.application"
@@ -95,37 +101,37 @@ WSGI_APPLICATION = "tweetme2.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.environ.get("SQL_USER", "alexandre"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "alocmey"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
-    }
+	"default": {
+		"ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+		"NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+		"USER": os.environ.get("SQL_USER", "alexandre"),
+		"PASSWORD": os.environ.get("SQL_PASSWORD", "alocmey"),
+		"HOST": os.environ.get("SQL_HOST", "localhost"),
+		"PORT": os.environ.get("SQL_PORT", "5432"),
+	}
 }
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# DATABASE_URL = os.environ.get('DATABASE_URL')
+# db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+	{
+		"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+	},
+	{
+		"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+	},
+	{
+		"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+	},
+	{
+		"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+	},
 ]
 
 
@@ -149,27 +155,31 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+	os.path.join(BASE_DIR, "static"),
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if DEBUG == 0:
+	DATABASE_URL = os.environ.get('DATABASE_URL')
+	db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500)
+	DATABASES['default'].update(db_from_env)
+	STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_RENDERER_CLASSES = [
-    "rest_framework.renderers.JSONRenderer",
+	"rest_framework.renderers.JSONRenderer",
 ]
 
 if DEBUG:
-    DEFAULT_RENDERER_CLASSES.append("rest_framework.renderers.BrowsableAPIRenderer")
+	DEFAULT_RENDERER_CLASSES.append("rest_framework.renderers.BrowsableAPIRenderer")
 
 DEFAULT_AUTHENTICATION_CLASSES = [
 	"rest_framework.authentication.SessionAuthentication",
 ]
 
-# if DEBUG:
-	# DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
+if DEBUG:
+	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
-    "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
+	"DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
+	"DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES,
 }

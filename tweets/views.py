@@ -20,7 +20,7 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 def home_view(request):
 	# return HttpResponse("<h1>Hello World</h1>")
-	return render(request, "pages/home.html")
+	return render(request, "pages/feed.html")
 
 def tweets_list_view(request):
 	return render(request, "tweets/list.html")

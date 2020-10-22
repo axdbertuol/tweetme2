@@ -40,10 +40,10 @@ def profile_update_view(request):
 def profile_detail_view(request, username):
 	#get the profile for the passed username
 	qs = Profile.objects.filter(user__username=username)
-
 	if not qs.exists():
 		raise Http404
 	profile_obj = qs.first()
+	print("a", profile_obj)
 	return render(
 		request, 
 		"profiles/detail.html", 

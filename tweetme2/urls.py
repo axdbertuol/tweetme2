@@ -24,19 +24,21 @@ from accounts.views import (
 )
 from tweets.views import (
     tweets_detail_view, 
-    tweets_list_view
+    tweets_list_view, home_view
 )
 
 urlpatterns = [
+	path('', home_view ),
     path('admin/', admin.site.urls),
+    path('global/', tweets_list_view ),
     path('react/', TemplateView.as_view(template_name='react_via_dj.html')),
 	path('login/', login_view),
 	path('register/', registration_view),
 	path('logout/', logout_view),
-    path('', tweets_list_view ),
     path('<int:tweet_id>', tweets_detail_view ),
 	re_path(r'profiles?/', include('profiles.urls')),
-    path('api/tweets/', include('tweets.api.urls'))
+    path('api/tweets/', include('tweets.api.urls')),
+    re_path(r'api/profiles?/', include('profiles.api.urls'))
 ]
 
 if settings.DEBUG:
