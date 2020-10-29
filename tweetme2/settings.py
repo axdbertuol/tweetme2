@@ -105,7 +105,7 @@ DATABASES = {
 		"ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
 		"NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
 		"USER": os.environ.get("SQL_USER", "alexandre"),
-		"PASSWORD": os.environ.get("SQL_PASSWORD", "alocmey"),
+		"PASSWORD": os.environ.get("SQL_PASSWORD", ""),
 		"HOST": os.environ.get("SQL_HOST", "localhost"),
 		"PORT": os.environ.get("SQL_PORT", "5432"),
 	}
@@ -153,12 +153,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
 
 STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, "static"),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
 if DEBUG == 0:
 	DATABASE_URL = os.environ.get('DATABASE_URL')
 	db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500)
@@ -176,8 +176,8 @@ DEFAULT_AUTHENTICATION_CLASSES = [
 	"rest_framework.authentication.SessionAuthentication",
 ]
 
-if DEBUG:
-	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
+# if DEBUG:
+# 	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
 
 REST_FRAMEWORK = {
 	"DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
