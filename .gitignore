@@ -1,7 +1,6 @@
 __pycache__
 env
 *.sqlite3
-tweetme2-web
 static-root
 
 # Created by https://www.toptal.com/developers/gitignore/api/django,react
