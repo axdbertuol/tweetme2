@@ -28,7 +28,7 @@ from tweets.views import (
 )
 
 urlpatterns = [
-	path('', home_view ),
+	path('', include('tweetme2-web.urls') ),
     path('admin/', admin.site.urls),
     path('global/', tweets_list_view ),
     path('react/', TemplateView.as_view(template_name='react_via_dj.html')),

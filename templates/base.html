@@ -10,24 +10,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     {% include 'react/css.html' %}
-    <style type="text/css">
-        .bg-tweetme {
-	        background-color: #751a82 !important;
-        }
-    </style>
 
     <title>Tweetme 2 {% block head_title %} {% endblock head_title %}</title>
 </head>
 
 <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    {% include "components/navbar.html" %}
-    <div class="container-sm">
-    {% block content %}
-    {% endblock content %}
-    </div>
-   {% include 'react/base_embed.html' %}
-   {% include 'react/js.html' %}
+	<noscript>You need to enable JavaScript to run this app.</noscript>
+	{% include "components/navbar.html" %}
+	<div class="app">
+	{% block content %}
+	{% endblock content %}
+	</div>
+	{% include 'react/base_embed.html' %}
+	{% include 'react/js.html' %}
 </body>
 
 </html>

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 	"django.contrib.staticfiles",
 	"rest_framework",
 	"corsheaders",
+	"tweetme2-web",
 	"accounts",
 	"profiles",
 	"tweets",
@@ -176,8 +177,8 @@ DEFAULT_AUTHENTICATION_CLASSES = [
 	"rest_framework.authentication.SessionAuthentication",
 ]
 
-# if DEBUG:
-# 	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
+if DEBUG:
+	DEFAULT_AUTHENTICATION_CLASSES.append("tweetme2.rest_api.dev.DevAuthentication")
 
 REST_FRAMEWORK = {
 	"DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,

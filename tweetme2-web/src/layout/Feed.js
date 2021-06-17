@@ -6,7 +6,6 @@ function Feed() {
 			<div className="feed__header">
 				Home
 			</div>
-			<TweetBox/>
 			tweets
 		</div>
 	)

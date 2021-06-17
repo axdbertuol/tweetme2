@@ -4,20 +4,28 @@ import './index.css';
 import App from './App';
 import { ProfileBadgeComponent} from './profiles'
 import { FeedComponent, TweetsComponent, TweetDetailComponent} from './tweets';
+import { Sidebar } from './layout';
 import * as serviceWorker from './serviceWorker';
 
-const appEl = document.getElementById('root');
-if (appEl) {
-  ReactDOM.render(
-    <React.StrictMode>
-			<App />
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-}
+// const appEl = document.getElementById('root');
+// if (appEl) {
+//   ReactDOM.render(
+//     <React.StrictMode>
+// 			<App />
+//     </React.StrictMode>,
+//     document.getElementById('root')
+//   );
+// }
 
 
 const e = React.createElement; 
+
+const sidebarEl = document.getElementById('tweetme-2-sidebar');
+if (sidebarEl) {
+	const JointComponent = e(Sidebar, sidebarEl.dataset);
+	ReactDOM.render(JointComponent, sidebarEl)
+}
+
 const tweetsEl = document.getElementById('tweetme-2');
 if (tweetsEl) {
 	const JointComponent = e(TweetsComponent, tweetsEl.dataset);

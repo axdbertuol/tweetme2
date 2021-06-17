@@ -34,22 +34,36 @@ function ListItemLink(props) {
 }
 
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 	const classes = useStyles();
 	return (
 		<div className="sidebar">
 			<List component="nav" aria-label="main menu folders">
-				<ListItem classes={classes} button>
+				{ props.username && <React.Fragment> 
+					<ListItem classes={classes} button onClick={(event) => { event.preventDefault(); window.location.href = ''; }}>
+						<ListItemIcon>
+							<HomeIcon />
+						</ListItemIcon>
+						<ListItemText primary="Home" />
+					</ListItem>
+					<ListItem classes={classes} button onClick={(event) => { event.preventDefault(); window.location.href = `/profile/${props.username}`; }}>
+						<ListItemIcon>
+							<PermIdentityIcon />
+						</ListItemIcon>
+						<ListItemText primary="Profile" />
+					</ListItem>
+				</React.Fragment>}
+				<ListItem classes={classes} button onClick={(event) => { event.preventDefault(); window.location.href = `/login`; }}>
 					<ListItemIcon>
 						<HomeIcon />
 					</ListItemIcon>
-					<ListItemText primary="Home" />
+					<ListItemText primary="Login" />
 				</ListItem>
-				<ListItem classes={classes} button>
+				<ListItem classes={classes} button onClick={(event) => { event.preventDefault(); window.location.href = `/register`; }}>
 					<ListItemIcon>
 						<PermIdentityIcon />
 					</ListItemIcon>
-					<ListItemText primary="Profile" />
+					<ListItemText primary="Register" />
 				</ListItem>
 			</List>
 			<Divider />
